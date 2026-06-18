@@ -1,0 +1,23 @@
+@let documentValue = document();
+@let scaleValue = scale();
+@defer (when documentValue) {
+  <div class="header">
+    <div class="header-title">{{ documentValue?.name }}</div>
+    <div class="header-tools">
+      {{ ((scaleValue * 100) | number : '1.0-0') + '%' }}
+      <button (click)="zoomIn()">+</button>
+      <button (click)="zoomOut()">-</button>
+      <button (click)="saveAnnotations()">Save</button>
+    </div>
+  </div>
+
+  <div class="document-wrapper">
+    <div class="document-content" [style]="{'--scale': scaledWidthPx()}">
+      @for (page of documentValue?.pages; track page.number) {
+        <app-page-view class="document-page" [page]="page" />
+      }
+    </div>
+  </div>
+} @placeholder (minimum 0.5s) {
+  loading...
+}

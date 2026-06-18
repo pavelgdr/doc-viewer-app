@@ -1,0 +1,37 @@
+<img
+  #contentImage
+  class="page-content"
+  [src]="page().imageUrl"
+  [alt]="'Page ' + page().number"
+  (load)="onPageLoaded(contentImage)"
+>
+
+@if (annotations) {
+  @for (annotation of annotations(); let idx = $index; track annotation.id) {
+    <div
+      class="annotation"
+      [style]="{
+      'left': annotation.relativeX() + '%',
+      'top': annotation.relativeY() + '%',
+      'width': annotation.relativeWidth() + '%',
+      'height': annotation.relativeHeight() + '%',
+   }"
+    >
+      <button class="annotation-delete-btn" (click)="deleteNote(idx)">+</button>
+
+      <div
+        class="annotation-content"
+        (mousedown)="startMoveAnnotation($event, annotation)"
+      >
+        @switch (annotation.type) {
+          @case ('text') {
+            <textarea class="annotation-content-text" [(ngModel)]="annotation.value"></textarea>
+          }
+          @case ('image') {
+            <!-- todo: image content implementation-->
+          }
+        }
+      </div>
+    </div>
+  }
+}
